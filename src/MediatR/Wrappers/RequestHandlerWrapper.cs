@@ -27,11 +27,21 @@ public class RequestHandlerWrapperImpl<TRequest, TResponse> : RequestHandlerWrap
     public override Task<TResponse> Handle(IRequest<TResponse> request, CancellationToken cancellationToken,
         ServiceFactory serviceFactory)
     {
+#if true
         Task<TResponse> Handler() => GetHandler<IRequestHandler<TRequest, TResponse>>(serviceFactory).Handle((TRequest) request, cancellationToken);
 
         return serviceFactory
             .GetInstances<IPipelineBehavior<TRequest, TResponse>>()
             .Reverse()
             .Aggregate((RequestHandlerDelegate<TResponse>) Handler, (next, pipeline) => () => pipeline.Handle((TRequest)request, cancellationToken, next))();
+        
+#else
+        var executor = new RequestExecutor<TRequest, TResponse>(
+            GetHandler<IRequestHandler<TRequest, TResponse>>(serviceFactory),
+            serviceFactory.GetInstances<IPipelineBehavior<TRequest, TResponse>>(),
+            (TRequest) request,
+            cancellationToken);
+        return executor.Handle();
+#endif
     }
 }
