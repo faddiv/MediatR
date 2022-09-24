@@ -17,6 +17,6 @@ public class GenericRequestPostProcessor<TRequest, TResponse> : IRequestPostProc
 
     public Task Process(TRequest request, TResponse response, CancellationToken cancellationToken)
     {
-        return _writer.WriteLineAsync("- All Done");
+        return Task.CompletedTask; //_writer.WriteLineAsync("- All Done");
     }
 }

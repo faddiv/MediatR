@@ -16,7 +16,7 @@ public class PingedHandler : INotificationHandler<Pinged>
 
     public Task Handle(Pinged notification, CancellationToken cancellationToken)
     {
-        return _writer.WriteLineAsync("Got pinged async.");
+        return Task.CompletedTask; //_writer.WriteLineAsync("Got pinged async.");
     }
 }
 
@@ -31,7 +31,7 @@ public class PongedHandler : INotificationHandler<Ponged>
 
     public Task Handle(Ponged notification, CancellationToken cancellationToken)
     {
-        return _writer.WriteLineAsync("Got ponged async.");
+        return Task.CompletedTask;// _writer.WriteLineAsync("Got ponged async.");
     }
 }
 
@@ -47,7 +47,7 @@ public class ConstrainedPingedHandler<TNotification> : INotificationHandler<TNot
 
     public Task Handle(TNotification notification, CancellationToken cancellationToken)
     {
-        return _writer.WriteLineAsync("Got pinged constrained async.");
+        return Task.CompletedTask;//_writer.WriteLineAsync("Got pinged constrained async.");
     }
 }
 
@@ -62,6 +62,6 @@ public class PingedAlsoHandler : INotificationHandler<Pinged>
 
     public Task Handle(Pinged notification, CancellationToken cancellationToken)
     {
-        return _writer.WriteLineAsync("Got pinged also async.");
+        return Task.CompletedTask;//_writer.WriteLineAsync("Got pinged also async.");
     }
 }

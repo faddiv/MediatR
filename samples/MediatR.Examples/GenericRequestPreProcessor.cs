@@ -16,6 +16,6 @@ public class GenericRequestPreProcessor<TRequest> : IRequestPreProcessor<TReques
 
     public Task Process(TRequest request, CancellationToken cancellationToken)
     {
-        return _writer.WriteLineAsync("- Starting Up");
+        return Task.CompletedTask;//_writer.WriteLineAsync("- Starting Up");
     }
 }

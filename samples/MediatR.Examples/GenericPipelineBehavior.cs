@@ -14,11 +14,11 @@ public class GenericPipelineBehavior<TRequest, TResponse> : IPipelineBehavior<TR
         _writer = writer;
     }
 
-    public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
+    public Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
     {
-        await _writer.WriteLineAsync("-- Handling Request");
-        var response = await next();
-        await  _writer.WriteLineAsync("-- Finished Request");
-        return response;
+        //await _writer.WriteLineAsync("-- Handling Request");
+        //var response = await next();
+        //await  _writer.WriteLineAsync("-- Finished Request");
+        return next();
     }
 }
