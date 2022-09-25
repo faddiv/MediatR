@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using BenchmarkDotNet.Attributes;
-using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Diagnosers;
 using MediatR.Examples;
 using MediatR.Pipeline;
@@ -24,7 +23,7 @@ namespace MediatR.Benchmarks
             new ConstrainedPingedHandler<Pinged>(TextWriter.Null),
         };
         private readonly PingHandler _handler = new PingHandler(TextWriter.Null);
-        private readonly List<IPipelineBehavior<Ping, Pong>> _behaviors = new List<IPipelineBehavior<Ping, Pong>>
+        private readonly IPipelineBehavior<Ping, Pong>[] _behaviors = new IPipelineBehavior<Ping, Pong>[]
                 {
                     new RequestPreProcessorBehavior<Ping, Pong>(new List<IRequestPreProcessor<Ping>>{
                         new GenericRequestPreProcessor<Ping>(TextWriter.Null)
@@ -42,7 +41,9 @@ namespace MediatR.Benchmarks
 
             services.AddSingleton(TextWriter.Null);
 
-            services.AddMediatR(typeof(Ping));
+            var config = new MediatRServiceConfiguration();
+            ServiceRegistrar.AddRequiredServices(services, config);
+            ServiceRegistrar.AddMediatRClasses(services, new[] { typeof(Ping).Assembly }, config);
             services.AddSingleton(_handler);
 
             services.AddSingleton(typeof(IPipelineBehavior<,>), typeof(GenericPipelineBehavior<,>));
@@ -77,11 +78,11 @@ namespace MediatR.Benchmarks
         {
             return _mediator.Send(_request);
         }
-
+        /*
         [Benchmark]
         public Task PublishingNotifications()
         {
             return _mediator.Publish(_notification);
-        }
+        }*/
     }
 }

@@ -1,5 +1,7 @@
 namespace MediatR.Wrappers;
 
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -27,7 +29,8 @@ public class RequestHandlerWrapperImpl<TRequest, TResponse> : RequestHandlerWrap
     public override Task<TResponse> Handle(IRequest<TResponse> request, CancellationToken cancellationToken,
         ServiceFactory serviceFactory)
     {
-#if true
+
+#if false
         Task<TResponse> Handler() => GetHandler<IRequestHandler<TRequest, TResponse>>(serviceFactory).Handle((TRequest) request, cancellationToken);
 
         return serviceFactory
@@ -36,9 +39,15 @@ public class RequestHandlerWrapperImpl<TRequest, TResponse> : RequestHandlerWrap
             .Aggregate((RequestHandlerDelegate<TResponse>) Handler, (next, pipeline) => () => pipeline.Handle((TRequest)request, cancellationToken, next))();
         
 #else
+        var requestHandler = GetHandler<IRequestHandler<TRequest, TResponse>>(serviceFactory);
+        var pipelines = 
+            //serviceFactory(typeof(IPipelineBehavior<TRequest, TResponse>[]))
+            serviceFactory.GetInstances<IPipelineBehavior<TRequest, TResponse>>();
+        var array = (IList<IPipelineBehavior<TRequest, TResponse>>) pipelines;
+        
         var executor = new RequestExecutor<TRequest, TResponse>(
-            GetHandler<IRequestHandler<TRequest, TResponse>>(serviceFactory),
-            serviceFactory.GetInstances<IPipelineBehavior<TRequest, TResponse>>(),
+            requestHandler,
+            array,
             (TRequest) request,
             cancellationToken);
         return executor.Handle();

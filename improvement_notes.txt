@@ -5,8 +5,39 @@ Original:
 | PublishingNotifications | 288.5 ns | 1.79 ns | 1.59 ns | 0.0954 |     400 B |
 
 
-Optimized 1:
+RequestExecutor with enumerator:
 |                  Method |     Mean |   Error |  StdDev |  Gen 0 | Allocated |
 |------------------------ |---------:|--------:|--------:|-------:|----------:|
 |         SendingRequests | 469.4 ns | 1.88 ns | 1.76 ns | 0.1087 |     456 B |
 | PublishingNotifications | 293.0 ns | 0.73 ns | 0.61 ns | 0.0954 |     400 B |
+
+Direct send:
+|                  Method |     Mean |   Error |  StdDev |  Gen 0 | Allocated |
+|------------------------ |---------:|--------:|--------:|-------:|----------:|
+|         SendingRequests | 406.8 ns | 3.86 ns | 3.61 ns | 0.1087 |     456 B |
+| PublishingNotifications | 311.1 ns | 3.11 ns | 2.91 ns | 0.0954 |     400 B |
+
+Using indexer and direct send:
+|        Method |     Mean |   Error |  StdDev |  Gen 0 | Allocated |
+|-------- ------ |---------:|--------:|--------:|-------:|----------:|
+| NoEnumeration | 240.9 ns | 2.03 ns | 1.90 ns | 0.1011 |     424 B |
+
+Using indexer (List<>):
+|          Method |     Mean |   Error |  StdDev |  Gen 0 | Allocated |
+|---------------- |---------:|--------:|--------:|-------:|----------:|
+| SendingRequests | 377.6 ns | 2.13 ns | 1.89 ns | 0.1011 |     424 B |
+
+Using indexer (IList<>):
+|          Method |     Mean |   Error |  StdDev |  Gen 0 | Allocated |
+|---------------- |---------:|--------:|--------:|-------:|----------:|
+| SendingRequests | 449.3 ns | 1.71 ns | 1.60 ns | 0.1011 |     424 B |
+
+Using indexer on sealed (array):
+|          Method |     Mean |   Error |  StdDev |  Gen 0 | Allocated |
+|---------------- |---------:|--------:|--------:|-------:|----------:|
+| SendingRequests | 364.2 ns | 5.97 ns | 5.29 ns | 0.1011 |     424 B |
+
+Using indexer on sealed (array no cast):
+|          Method |     Mean |   Error |  StdDev |  Gen 0 | Allocated |
+|---------------- |---------:|--------:|--------:|-------:|----------:|
+| SendingRequests | 359.4 ns | 4.29 ns | 4.01 ns | 0.1011 |     424 B |

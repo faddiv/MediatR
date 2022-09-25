@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using MediatR.Benchmarks;
 using MediatR.Pipeline;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -22,7 +23,9 @@ public static class Program
 
         services.AddSingleton<TextWriter>(writer);
 
-        services.AddMediatR(typeof(Ping), typeof(Sing));
+        var config = new MediatRServiceConfiguration();
+        ServiceRegistrar.AddRequiredServices(services, config);
+        ServiceRegistrar.AddMediatRClasses(services, new[] { typeof(Ping).Assembly, typeof(Sing).Assembly }, config);
 
         services.AddScoped(typeof(IStreamRequestHandler<Sing, Song>), typeof(SingHandler));
 
