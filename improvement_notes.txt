@@ -41,3 +41,8 @@ Using indexer on sealed (array no cast):
 |          Method |     Mean |   Error |  StdDev |  Gen 0 | Allocated |
 |---------------- |---------:|--------:|--------:|-------:|----------:|
 | SendingRequests | 359.4 ns | 4.29 ns | 4.01 ns | 0.1011 |     424 B |
+
+Using IList<>, repeatable next call:
+|          Method |     Mean |   Error |  StdDev |  Gen 0 | Allocated |
+|---------------- |---------:|--------:|--------:|-------:|----------:|
+| SendingRequests | 512.1 ns | 5.10 ns | 4.52 ns | 0.1583 |     664 B |

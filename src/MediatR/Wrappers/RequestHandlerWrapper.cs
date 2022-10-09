@@ -44,7 +44,7 @@ public class RequestHandlerWrapperImpl<TRequest, TResponse> : RequestHandlerWrap
             //serviceFactory(typeof(IPipelineBehavior<TRequest, TResponse>[]))
             serviceFactory.GetInstances<IPipelineBehavior<TRequest, TResponse>>();
         var array = (IList<IPipelineBehavior<TRequest, TResponse>>) pipelines;
-        
+
         var executor = new RequestExecutor<TRequest, TResponse>(
             requestHandler,
             array,
